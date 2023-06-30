@@ -1,3 +1,4 @@
+import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -14,15 +15,20 @@ class StickerGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late PathProvider _pathProvider =
+    late PathProvider pathProvider =
         Provider.of<PathProvider>(context, listen: false);
     return GestureDetector(
       onTap: () {
-        print(sticker.id);
-        _pathProvider.setPath(sticker.path);
-        Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+        if (sticker.usable == false) {
+        } else {
+          print(sticker.id);
+          pathProvider.setPath(sticker.path);
+          Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+        }
       },
-      child: Image.asset(sticker.path),
+      child: sticker.usable
+          ? Image.asset(sticker.path)
+          : Image.asset(sticker.path).blurred(blur: 3),
     );
   }
 }
